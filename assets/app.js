@@ -72,7 +72,7 @@ function showToast(message) {
   toastTimer = setTimeout(() => elements.toast.classList.remove("show"), 2400);
 }
 
-async function copyText(text, successMessage = "已复制") {
+function copyText(text, successMessage = "已复制") {
   try {
     const textarea = document.createElement("textarea");
     textarea.value = text;
@@ -80,16 +80,13 @@ async function copyText(text, successMessage = "已复制") {
     textarea.style.opacity = "0";
     document.body.append(textarea);
     textarea.select();
-    const copiedWithSelection = document.execCommand("copy");
+    const copied = document.execCommand("copy");
     textarea.remove();
-    if (!copiedWithSelection) {
-      if (!navigator.clipboard || !window.isSecureContext) throw new Error("copy failed");
-      await navigator.clipboard.writeText(text);
-    }
+    if (!copied) throw new Error("copy failed");
     showToast(successMessage);
     return true;
   } catch {
-    showToast("复制失败，请手动选择文本复制");
+    showToast("自动复制不可用，请按 Ctrl+C 复制已选中的文本");
     return false;
   }
 }
