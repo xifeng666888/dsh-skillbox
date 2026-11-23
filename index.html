@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="DSH SKILLBOX：发现、筛选并安装 DeepSeek Harness Skill。公开来源、中文简介、安装验证状态与一键复制命令。">
+  <meta name="theme-color" content="#102b24">
+  <title>DSH SKILLBOX · 找到顺手的 DSH 技能</title>
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="assets/styles.css">
+  <script src="assets/app.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#catalog">跳到技能库</a>
+  <header class="site-header">
+    <div class="nav wrap">
+      <a class="brand" href="#top" aria-label="DSH SKILLBOX 首页">
+        <span class="brand-mark">S</span>
+        <span><b>DSH</b> SKILLBOX<small>技能工具箱</small></span>
+      </a>
+      <nav class="nav-links" aria-label="主导航">
+        <a href="#catalog">技能库</a>
+        <a href="#guide">使用指南</a>
+        <a href="#about">关于</a>
+      </nav>
+      <a class="button button-small button-outline" href="https://github.com/xifeng666888/dsh-skillbox" target="_blank" rel="noopener">GitHub <span aria-hidden="true">↗</span></a>
+    </div>
+  </header>
+
+  <main id="top" class="wrap">
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="hero-copy">
+        <p class="eyebrow"><span></span> OPEN · CURATED · FREE</p>
+        <h1 id="hero-title">找到下一个<br><em>顺手技能。</em></h1>
+        <p class="hero-lede">把分散在 GitHub 的 DSH Skill 放进一个工具箱。看清来源、验证状态与安装方式，再决定把它装进你的工作流。</p>
+        <div class="hero-actions">
+          <a class="button button-accent" href="#catalog">逛逛技能库 <span aria-hidden="true">↓</span></a>
+          <button class="button button-ghost" type="button" data-copy-index>复制 DSH 索引源</button>
+        </div>
+        <p class="hero-note">社区项目导航，不代表 DeepSeek 官方推荐。安装前请阅读原仓库说明。</p>
+      </div>
+      <aside class="hero-board" aria-label="技能库概览">
+        <div class="board-top"><span>TOOLBOX / 001</span><span class="live-dot">公开数据</span></div>
+        <div class="board-number"><strong id="skill-count">—</strong><span>个精选项目</span></div>
+        <div class="board-row"><span>安装已验证</span><b id="verified-count">—</b></div>
+        <div class="board-row"><span>数据许可</span><b>CC BY 4.0</b></div>
+        <div class="board-row"><span>数据来源</span><a href="https://www.dsh.so/market/" target="_blank" rel="noopener">dsh.so ↗</a></div>
+        <div class="board-foot">DISCOVER · REVIEW · INSTALL</div>
+      </aside>
+    </section>
+
+    <section class="quick-start" aria-label="按任务查找">
+      <span>按任务找</span>
+      <button type="button" data-quick="编程">写代码</button>
+      <button type="button" data-quick="研究">做研究</button>
+      <button type="button" data-quick="文档">处理文档</button>
+      <button type="button" data-quick="记忆">管理记忆</button>
+      <button type="button" data-quick="技能">管理 Skill</button>
+    </section>
+
+    <section id="catalog" class="catalog" aria-labelledby="catalog-title">
+      <div class="section-heading">
+        <div><p class="section-kicker">SKILL CATALOG</p><h2 id="catalog-title">技能库</h2></div>
+        <p>先核验，再安装。</p>
+      </div>
+
+      <div class="toolbar">
+        <label class="search-box">
+          <span aria-hidden="true">⌕</span>
+          <span class="sr-only">搜索技能</span>
+          <input id="search" type="search" placeholder="搜索名称、简介、作者或标签…" autocomplete="off">
+          <kbd>/</kbd>
+        </label>
+        <label class="sort-control">排序
+          <select id="sort">
+            <option value="stars">星数最多</option>
+            <option value="name">名称 A–Z</option>
+            <option value="verified">验证优先</option>
+          </select>
+        </label>
+      </div>
+
+      <div class="filter-row">
+        <div id="categories" class="categories" aria-label="技能分类"></div>
+        <div class="filter-options">
+          <label class="check-control"><input id="verified-only" type="checkbox"> 仅看已验证</label>
+          <button id="favorites-only" class="favorites-filter" type="button" aria-pressed="false">☆ 收藏 <span id="favorite-count">0</span></button>
+        </div>
+      </div>
+
+      <div class="result-line"><p id="result-summary" aria-live="polite">正在读取技能数据…</p><button id="reset-filters" type="button">重置筛选</button></div>
+      <div id="skill-grid" class="skill-grid" aria-busy="true"></div>
+      <div id="empty-state" class="empty-state" hidden>
+        <span aria-hidden="true">◇</span><h3>没有找到匹配的技能</h3><p>换个关键词，或清除筛选后再看看。</p><button class="button button-dark" type="button" data-reset>清除筛选</button>
+      </div>
+      <div class="load-more-wrap"><button id="load-more" class="button button-load" type="button" hidden>加载更多</button></div>
+    </section>
+
+    <section id="guide" class="guide" aria-labelledby="guide-title">
+      <div class="guide-intro">
+        <p class="section-kicker">QUICK GUIDE</p>
+        <h2 id="guide-title">两种用法，<br>都很简单。</h2>
+        <p>只想装一个，复制卡片里的命令；想拥有完整市场，把公开索引添加到 DSH。</p>
+      </div>
+      <div class="guide-steps">
+        <article><span>01</span><div><h3>启用自定义索引</h3><p>在 DSH 插件页启用实验功能“Custom plugin indexes”。</p></div></article>
+        <article><span>02</span><div><h3>添加市场索引</h3><p>进入 Discover → Manage index sources → Add index source。</p><div class="code-line"><code>https://cdn.dsh.so/market/top-rank.json</code><button type="button" data-copy-index aria-label="复制索引地址">复制</button></div></div></article>
+        <article><span>03</span><div><h3>搜索并安装</h3><p>回到 Discover 搜索技能；也可以打开本站卡片详情，复制单项安装命令。</p></div></article>
+      </div>
+    </section>
+
+    <section id="about" class="about" aria-labelledby="about-title">
+      <div><p class="section-kicker">ABOUT THE DATA</p><h2 id="about-title">公开来源，清楚边界。</h2></div>
+      <div class="about-copy">
+        <p>技能介绍、版本、星数与验证标签来自 <a href="https://www.dsh.so/market/" target="_blank" rel="noopener">dsh.so 公开市场索引</a>，按 CC BY 4.0 署名复用。原项目代码及许可证归各作者所有，请点击 GitHub 仓库核验。</p>
+        <p>“安装已验证”表示数据源记录过沙盒安装验证，不等于人工安全审查，也不保证适配你的 DSH 版本。本站不托管第三方安装包，不收集账号信息。</p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap footer-inner"><span><b>DSH SKILLBOX</b> · 由 xifeng666888 维护</span><span>数据：<a href="https://www.dsh.so/market/" target="_blank" rel="noopener">dsh.so</a> / CC BY 4.0 · 非 DeepSeek 官方站点</span></div>
+  </footer>
+
+  <dialog id="skill-dialog" class="skill-dialog" aria-labelledby="dialog-title">
+    <button id="dialog-close" class="dialog-close" type="button" aria-label="关闭详情">×</button>
+    <div id="dialog-content"></div>
+  </dialog>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+</body>
+</html>
