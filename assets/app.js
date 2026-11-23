@@ -87,8 +87,10 @@ async function copyText(text, successMessage = "已复制") {
       await navigator.clipboard.writeText(text);
     }
     showToast(successMessage);
+    return true;
   } catch {
     showToast("复制失败，请手动选择文本复制");
+    return false;
   }
 }
 
@@ -251,7 +253,18 @@ function openDetails(item) {
   const code = makeElement("code", "", item.install);
   const copy = makeElement("button", "", "复制命令");
   copy.type = "button";
-  copy.addEventListener("click", () => copyText(item.install, "安装命令已复制"));
+  copy.addEventListener("click", async () => {
+    const copied = await copyText(item.install, "安装命令已复制");
+    copy.textContent = copied ? "已复制" : "请手动复制";
+    if (!copied) {
+      const selection = window.getSelection();
+      const range = document.createRange();
+      range.selectNodeContents(code);
+      selection.removeAllRanges();
+      selection.addRange(range);
+    }
+    setTimeout(() => { copy.textContent = "复制命令"; }, 2400);
+  });
   installBox.append(code, copy);
 
   const actions = makeElement("div", "dialog-actions");
