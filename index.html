@@ -7,8 +7,9 @@
   <meta name="theme-color" content="#102b24">
   <title>DSH SKILLBOX · DSH 技能、主题与 MCP 工具箱</title>
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="assets/styles.css?v=5">
+  <link rel="stylesheet" href="assets/styles.css?v=6">
   <script src="assets/app.js?v=5" defer></script>
+  <script src="assets/pixel-scene.js?v=1" defer></script>
 </head>
 <body>
   <a class="skip-link" href="#catalog">跳到技能库</a>
@@ -30,25 +31,47 @@
   </header>
 
   <main id="top" class="wrap">
-    <section class="hero" aria-labelledby="hero-title">
-      <div class="hero-copy">
-        <p class="eyebrow"><span></span> OPEN · CURATED · FREE</p>
-        <h1 id="hero-title">找到下一个<br><em>顺手技能。</em></h1>
-        <p class="hero-lede">把分散在 GitHub 的 DSH Skill、界面主题、启动动画与 MCP 服务放进一个工具箱。看清来源、验证状态与安装方式，再决定把它装进你的工作流。</p>
-        <div class="hero-actions">
-          <a class="button button-accent" href="#catalog">逛逛技能库 <span aria-hidden="true">↓</span></a>
-          <button class="button button-ghost" type="button" data-copy-index>复制 DSH 索引源</button>
+    <section class="pixel-hero" aria-labelledby="hero-title">
+      <div class="pixel-intro">
+        <div>
+          <p class="eyebrow"><span></span> PIXEL WORKSHOP · INTERACTIVE</p>
+          <h1 id="hero-title">让工具箱，<br><em>动起来。</em></h1>
         </div>
-        <p class="hero-note">社区项目导航，不代表 DeepSeek 官方推荐。安装前请阅读原仓库说明。</p>
+        <div class="pixel-intro-side">
+          <p>大肥鱼会跟着鼠标游动，遇到蛋炒饭还会比心。点击云朵、蘑菇和蛋炒饭，看看这个小世界里藏着什么反应。</p>
+          <a class="button button-dark" href="#catalog">打开 DSH 资源库 <span aria-hidden="true">↓</span></a>
+        </div>
       </div>
-      <aside class="hero-board" aria-label="技能库概览">
-        <div class="board-top"><span>TOOLBOX / 001</span><span class="live-dot">公开数据</span></div>
-        <div class="board-number"><strong id="skill-count">—</strong><span>个精选项目</span></div>
-        <div class="board-row"><span>安装已验证</span><b id="verified-count">—</b></div>
-        <div class="board-row"><span>数据许可</span><b>CC BY 4.0</b></div>
-        <div class="board-row"><span>数据来源</span><a href="https://www.dsh.so/market/" target="_blank" rel="noopener">dsh.so ↗</a></div>
-        <div class="board-foot">DISCOVER · REVIEW · INSTALL</div>
-      </aside>
+
+      <div class="pixel-terminal">
+        <div class="terminal-titlebar">
+          <span class="terminal-lights" aria-hidden="true"><i></i><i></i><i></i></span>
+          <span>fat-fish.exe</span>
+          <span class="terminal-live">LIVE</span>
+        </div>
+        <div class="scene-frame">
+          <canvas id="pixel-scene" width="960" height="400" tabindex="0" aria-describedby="scene-help" aria-label="互动像素场景：大肥鱼跟随指针游动，可点击云朵、蛋炒饭和蘑菇；方向键移动，Enter 投喂"></canvas>
+          <div id="scene-help" class="scene-help">移动鼠标 / 触摸屏幕，带大肥鱼游过去</div>
+        </div>
+        <div class="terminal-statusbar">
+          <span>// FAT FISH · INTERACTIVE</span>
+          <span id="scene-status" role="status" aria-live="polite">大肥鱼正在等你陪它玩 ♡</span>
+        </div>
+      </div>
+
+      <div class="scene-actions" aria-label="场景控制">
+        <button id="feed-button" type="button">投喂蛋炒饭</button>
+        <button id="snow-button" type="button" aria-pressed="true">暂停下雪</button>
+        <button id="reset-scene-button" type="button">召唤大肥鱼</button>
+        <span>提示：场景里的物品也可以直接点击</span>
+      </div>
+
+      <div class="scene-stats" aria-label="资源库概览">
+        <div><strong id="skill-count">—</strong><span>当前分栏项目</span></div>
+        <div><strong id="verified-count">—</strong><span>安装已验证</span></div>
+        <div><strong>CC BY 4.0</strong><span>公开数据许可</span></div>
+        <div><strong>dsh.so</strong><span>公开数据来源</span></div>
+      </div>
     </section>
 
     <section class="quick-start" aria-label="按任务查找">
