@@ -1,6 +1,6 @@
 # DSH SKILLBOX
 
-一个独立、无前端依赖的 DeepSeek Harness Skill 与界面主题聚合站。支持技能 / 主题双分栏、搜索、分类、排序、安装验证筛选、本地收藏、项目详情和复制安装命令。
+一个独立、无前端依赖的 DeepSeek Harness Skill、界面主题与 MCP 聚合站。支持技能 / 主题 / MCP 分栏、搜索、分类、排序、安装验证筛选、本地收藏、项目详情和复制安装命令。
 
 ## 本地运行
 
@@ -20,11 +20,11 @@ Windows PowerShell：
 ./scripts/update-data.ps1
 ```
 
-脚本读取 dsh.so 的精选榜单索引，分别生成 `data/skills.json`（Skill 及 Skill 相关项目）和 `data/themes.json`（启动动画、主题皮肤、桌面挂件与界面增强）。更新后检查数据与页面，再提交变更。
+脚本读取 dsh.so 的精选榜单索引，分别生成 `data/skills.json`、`data/themes.json` 和 `data/mcp.json`。更新后检查数据与页面，再提交变更。
 
 ## 部署
 
-将仓库根目录的静态文件上传到任意 Web 服务器即可，无需构建、数据库或后端。入口为 `index.html`，数据入口为 `data/skills.json` 和 `data/themes.json`。
+将仓库根目录的静态文件上传到任意 Web 服务器即可，无需构建、数据库或后端。入口为 `index.html`，数据入口为 `data/skills.json`、`data/themes.json` 和 `data/mcp.json`。
 
 ## 数据与许可
 

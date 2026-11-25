@@ -119,6 +119,12 @@ kbd { padding: 1px 7px; color: #87938b; border: 1px solid var(--line); backgroun
 .skill-card[data-category="主题皮肤"] .skill-icon { background: #e5e1ff; }
 .skill-card[data-category="桌面挂件"] .skill-icon { background: #dcefeb; }
 .skill-card[data-category="界面增强"] .skill-icon { background: #e0edff; }
+.skill-card[data-category="研究与办公"] .skill-icon { background: #fff0d9; }
+.skill-card[data-category="创作与媒体"] .skill-icon { background: #f4e2ef; }
+.skill-card[data-category="搜索与浏览"] .skill-icon { background: #e5e1ff; }
+.skill-card[data-category="系统与开发"] .skill-icon { background: #e0edff; }
+.skill-card[data-category="智能体与协作"] .skill-icon { background: #dcefeb; }
+.skill-card[data-category="连接与集成"] .skill-icon { background: #e4efdf; }
 .favorite-button { width: 32px; height: 32px; padding: 0; color: #89958d; border: 0; background: transparent; border-radius: 8px; font-size: 22px; line-height: 1; }
 .favorite-button:hover { background: var(--soft); }
 .favorite-button.active { color: #b27a05; }
@@ -212,7 +218,8 @@ kbd { padding: 1px 7px; color: #87938b; border: 1px solid var(--line); backgroun
   .catalog { padding: 52px 0; }
   .section-heading h2, .guide h2, .about h2 { font-size: 31px; }
   .collection-tabs { width: 100%; }
-  .collection-tab { flex: 1; padding-inline: 10px; }
+  .collection-tab { flex: 1; gap: 7px; padding-inline: 8px; font-size: 12px; }
+  .collection-count { min-width: 24px; padding-inline: 5px; }
   .toolbar { grid-template-columns: 1fr; }
   .sort-control { min-height: 46px; justify-content: space-between; }
   .filter-options { flex-wrap: wrap; }

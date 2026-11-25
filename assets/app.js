@@ -15,11 +15,18 @@ const COLLECTIONS = {
     placeholder: "搜索主题、皮肤、启动动画或挂件…",
     categories: ["启动动画", "主题皮肤", "桌面挂件", "界面增强"],
   },
+  mcp: {
+    label: "MCP",
+    title: "MCP 服务",
+    url: "data/mcp.json",
+    placeholder: "搜索 MCP 服务、工具、作者或标签…",
+    categories: ["研究与办公", "创作与媒体", "搜索与浏览", "系统与开发", "智能体与协作", "连接与集成"],
+  },
 };
 
 const state = {
   collection: "skills",
-  cache: { skills: [], themes: [] },
+  cache: { skills: [], themes: [], mcp: [] },
   loadId: 0,
   items: [],
   filtered: [],
