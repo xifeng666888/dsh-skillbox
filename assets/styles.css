@@ -50,7 +50,7 @@ img, svg { display: block; }
 .hero { position: relative; display: grid; grid-template-columns: 1.45fr .8fr; gap: 50px; margin-top: 28px; padding: 64px; overflow: hidden; color: white; background: var(--deep); border-radius: 26px; }
 .hero::before { position: absolute; inset: 0; content: ""; opacity: .13; background-image: linear-gradient(rgba(255,255,255,.25) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.25) 1px, transparent 1px); background-size: 42px 42px; mask-image: linear-gradient(to right, black, transparent 80%); }
 .hero::after { position: absolute; right: -120px; bottom: -170px; width: 440px; height: 440px; content: ""; border: 70px solid rgba(217, 242, 117, .08); border-radius: 50%; }
-.hero-copy, .hero-board { position: relative; z-index: 1; }
+.hero-copy, .hero-board { position: relative; z-index: 1; min-width: 0; }
 .eyebrow, .section-kicker { margin: 0 0 15px; color: var(--accent); font-size: 11px; font-weight: 800; letter-spacing: 2px; }
 .eyebrow { display: flex; align-items: center; gap: 9px; color: var(--lime); }
 .eyebrow span { width: 20px; height: 2px; background: var(--lime); }
@@ -79,6 +79,10 @@ h1 em { color: var(--lime); font-style: normal; }
 .section-heading { display: flex; align-items: end; justify-content: space-between; margin-bottom: 25px; }
 .section-heading h2, .guide h2, .about h2 { margin: 0; font-size: 38px; line-height: 1.2; letter-spacing: -1.5px; }
 .section-heading > p { margin: 0; color: var(--muted); font-size: 13px; }
+.collection-tabs { display: flex; width: fit-content; max-width: 100%; gap: 5px; margin-bottom: 18px; padding: 5px; background: #e5eae3; border-radius: 12px; }
+.collection-tab { display: flex; align-items: center; justify-content: center; gap: 12px; padding: 10px 17px; color: var(--muted); border: 0; background: transparent; border-radius: 8px; font-size: 13px; font-weight: 700; }
+.collection-tab.active { color: var(--deep); background: var(--card); box-shadow: 0 3px 12px rgba(18, 44, 34, .09); }
+.collection-count { min-width: 28px; padding: 1px 7px; color: var(--accent); background: var(--soft); border-radius: 99px; font-size: 11px; }
 .toolbar { display: grid; grid-template-columns: 1fr auto; gap: 12px; }
 .search-box { display: flex; min-height: 54px; align-items: center; gap: 12px; padding: 0 17px; background: var(--card); border: 1px solid var(--line); border-radius: 12px; }
 .search-box:focus-within { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(11,122,96,.09); }
@@ -111,6 +115,10 @@ kbd { padding: 1px 7px; color: #87938b; border: 1px solid var(--line); backgroun
 .skill-card[data-category="联网研究"] .skill-icon { background: #e5e1ff; }
 .skill-card[data-category="记忆知识"] .skill-icon { background: #dcefeb; }
 .skill-card[data-category="技能管理"] .skill-icon { background: #f4e2ef; }
+.skill-card[data-category="启动动画"] .skill-icon { background: #fff0d9; }
+.skill-card[data-category="主题皮肤"] .skill-icon { background: #e5e1ff; }
+.skill-card[data-category="桌面挂件"] .skill-icon { background: #dcefeb; }
+.skill-card[data-category="界面增强"] .skill-icon { background: #e0edff; }
 .favorite-button { width: 32px; height: 32px; padding: 0; color: #89958d; border: 0; background: transparent; border-radius: 8px; font-size: 22px; line-height: 1; }
 .favorite-button:hover { background: var(--soft); }
 .favorite-button.active { color: #b27a05; }
@@ -184,7 +192,7 @@ kbd { padding: 1px 7px; color: #87938b; border: 1px solid var(--line); backgroun
 
 @media (max-width: 980px) {
   .hero { grid-template-columns: 1fr; padding: 48px; }
-  .hero-board { max-width: 450px; transform: none; }
+  .hero-board { width: 100%; max-width: 450px; transform: none; }
   .skill-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .filter-row { flex-direction: column; }
   .guide, .about { gap: 35px; padding: 45px; }
@@ -203,6 +211,8 @@ kbd { padding: 1px 7px; color: #87938b; border: 1px solid var(--line); backgroun
   .quick-start { padding-top: 15px; }
   .catalog { padding: 52px 0; }
   .section-heading h2, .guide h2, .about h2 { font-size: 31px; }
+  .collection-tabs { width: 100%; }
+  .collection-tab { flex: 1; padding-inline: 10px; }
   .toolbar { grid-template-columns: 1fr; }
   .sort-control { min-height: 46px; justify-content: space-between; }
   .filter-options { flex-wrap: wrap; }

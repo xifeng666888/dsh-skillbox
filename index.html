@@ -3,12 +3,12 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="DSH SKILLBOX：发现、筛选并安装 DeepSeek Harness Skill。公开来源、中文简介、安装验证状态与一键复制命令。">
+  <meta name="description" content="DSH SKILLBOX：发现、筛选并安装 DeepSeek Harness Skill、界面主题、启动动画与桌面挂件。公开来源、中文简介与安装详情。">
   <meta name="theme-color" content="#102b24">
-  <title>DSH SKILLBOX · 找到顺手的 DSH 技能</title>
+  <title>DSH SKILLBOX · DSH 技能与界面主题工具箱</title>
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="assets/styles.css?v=3">
-  <script src="assets/app.js?v=3" defer></script>
+  <link rel="stylesheet" href="assets/styles.css?v=4">
+  <script src="assets/app.js?v=4" defer></script>
 </head>
 <body>
   <a class="skip-link" href="#catalog">跳到技能库</a>
@@ -19,7 +19,8 @@
         <span><b>DSH</b> SKILLBOX<small>技能工具箱</small></span>
       </a>
       <nav class="nav-links" aria-label="主导航">
-        <a href="#catalog">技能库</a>
+        <a href="#catalog" data-collection-link="skills">技能库</a>
+        <a href="#catalog" data-collection-link="themes">界面与主题</a>
         <a href="#guide">使用指南</a>
         <a href="#about">关于</a>
       </nav>
@@ -32,7 +33,7 @@
       <div class="hero-copy">
         <p class="eyebrow"><span></span> OPEN · CURATED · FREE</p>
         <h1 id="hero-title">找到下一个<br><em>顺手技能。</em></h1>
-        <p class="hero-lede">把分散在 GitHub 的 DSH Skill 放进一个工具箱。看清来源、验证状态与安装方式，再决定把它装进你的工作流。</p>
+        <p class="hero-lede">把分散在 GitHub 的 DSH Skill、界面主题与启动动画放进一个工具箱。看清来源、验证状态与安装方式，再决定把它装进你的工作流。</p>
         <div class="hero-actions">
           <a class="button button-accent" href="#catalog">逛逛技能库 <span aria-hidden="true">↓</span></a>
           <button class="button button-ghost" type="button" data-copy-index>复制 DSH 索引源</button>
@@ -60,8 +61,13 @@
 
     <section id="catalog" class="catalog" aria-labelledby="catalog-title">
       <div class="section-heading">
-        <div><p class="section-kicker">SKILL CATALOG</p><h2 id="catalog-title">技能库</h2></div>
+        <div><p class="section-kicker">RESOURCE CATALOG</p><h2 id="catalog-title">技能库</h2></div>
         <p>先核验，再安装。</p>
+      </div>
+
+      <div class="collection-tabs" role="tablist" aria-label="资源类型">
+        <button class="collection-tab active" type="button" role="tab" data-collection="skills" aria-selected="true"><span>DSH Skill</span><b class="collection-count">97</b></button>
+        <button class="collection-tab" type="button" role="tab" data-collection="themes" aria-selected="false"><span>界面与主题</span><b class="collection-count">131</b></button>
       </div>
 
       <div class="toolbar">
@@ -112,7 +118,7 @@
     <section id="about" class="about" aria-labelledby="about-title">
       <div><p class="section-kicker">ABOUT THE DATA</p><h2 id="about-title">公开来源，清楚边界。</h2></div>
       <div class="about-copy">
-        <p>技能介绍、版本、星数与验证标签来自 <a href="https://www.dsh.so/market/" target="_blank" rel="noopener">dsh.so 公开市场索引</a>，按 CC BY 4.0 署名复用。原项目代码及许可证归各作者所有，请点击 GitHub 仓库核验。</p>
+        <p>技能与主题的介绍、版本、星数与验证标签来自 <a href="https://www.dsh.so/market/" target="_blank" rel="noopener">dsh.so 公开市场索引</a>，按 CC BY 4.0 署名复用。原项目代码及许可证归各作者所有，请点击 GitHub 仓库核验。</p>
         <p>“安装已验证”表示数据源记录过沙盒安装验证，不等于人工安全审查，也不保证适配你的 DSH 版本。本站不托管第三方安装包，不收集账号信息。</p>
       </div>
     </section>

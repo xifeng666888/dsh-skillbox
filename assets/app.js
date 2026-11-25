@@ -1,8 +1,26 @@
 const INDEX_URL = "https://cdn.dsh.so/market/top-rank.json";
 const PAGE_SIZE = 12;
-const CATEGORY_ORDER = ["开发编程", "创作办公", "联网研究", "记忆知识", "技能管理", "智能体", "效率工具"];
+const COLLECTIONS = {
+  skills: {
+    label: "DSH Skill",
+    title: "技能库",
+    url: "data/skills.json",
+    placeholder: "搜索技能名称、简介、作者或标签…",
+    categories: ["开发编程", "创作办公", "联网研究", "记忆知识", "技能管理", "智能体", "效率工具"],
+  },
+  themes: {
+    label: "界面与主题",
+    title: "界面与主题",
+    url: "data/themes.json",
+    placeholder: "搜索主题、皮肤、启动动画或挂件…",
+    categories: ["启动动画", "主题皮肤", "桌面挂件", "界面增强"],
+  },
+};
 
 const state = {
+  collection: "skills",
+  cache: { skills: [], themes: [] },
+  loadId: 0,
   items: [],
   filtered: [],
   query: "",
@@ -51,7 +69,7 @@ function skillInitial(item) {
 function loadFavorites() {
   try {
     const saved = JSON.parse(localStorage.getItem("dsh-skillbox-favorites") || "[]");
-    if (Array.isArray(saved)) state.favorites = new Set(saved.filter((value) => typeof value === "string"));
+    if (Array.isArray(saved)) state.favorites = new Set(saved.filter((value) => typeof value === "string").map((value) => value.includes(":") ? value : `skills:${value}`));
   } catch {
     state.favorites = new Set();
   }
@@ -63,6 +81,10 @@ function saveFavorites() {
   } catch {
     showToast("浏览器未允许保存收藏，本次仍然有效");
   }
+}
+
+function favoriteKey(item) {
+  return `${state.collection}:${item.id}`;
 }
 
 function showToast(message) {
@@ -101,11 +123,11 @@ function createCard(item) {
 
   const top = makeElement("div", "card-top");
   top.append(makeElement("span", "skill-icon", skillInitial(item)));
-  const favorite = makeElement("button", `favorite-button${state.favorites.has(item.id) ? " active" : ""}`, state.favorites.has(item.id) ? "★" : "☆");
+  const favorite = makeElement("button", `favorite-button${state.favorites.has(favoriteKey(item)) ? " active" : ""}`, state.favorites.has(favoriteKey(item)) ? "★" : "☆");
   favorite.type = "button";
-  favorite.setAttribute("aria-label", `${state.favorites.has(item.id) ? "取消收藏" : "收藏"} ${item.name}`);
-  favorite.setAttribute("aria-pressed", String(state.favorites.has(item.id)));
-  favorite.addEventListener("click", () => toggleFavorite(item.id));
+  favorite.setAttribute("aria-label", `${state.favorites.has(favoriteKey(item)) ? "取消收藏" : "收藏"} ${item.name}`);
+  favorite.setAttribute("aria-pressed", String(state.favorites.has(favoriteKey(item))));
+  favorite.addEventListener("click", () => toggleFavorite(favoriteKey(item)));
   top.append(favorite);
 
   const badges = makeElement("div", "card-badges");
@@ -158,7 +180,7 @@ function updateFavoriteCount() {
 
 function renderCategories() {
   const present = new Set(state.items.map((item) => item.category));
-  const categories = ["全部", ...CATEGORY_ORDER.filter((category) => present.has(category))];
+  const categories = ["全部", ...COLLECTIONS[state.collection].categories.filter((category) => present.has(category))];
   elements.categories.replaceChildren();
   categories.forEach((category) => {
     const count = category === "全部" ? state.items.length : state.items.filter((item) => item.category === category).length;
@@ -180,7 +202,7 @@ function applyFilters() {
   state.filtered = state.items.filter((item) => {
     if (state.category !== "全部" && item.category !== state.category) return false;
     if (state.verifiedOnly && !item.verified) return false;
-    if (state.favoritesOnly && !state.favorites.has(item.id)) return false;
+    if (state.favoritesOnly && !state.favorites.has(favoriteKey(item))) return false;
     if (!query) return true;
     const haystack = [item.name, item.summary, item.author, item.category, ...(item.keywords || [])].join(" ").toLowerCase();
     return haystack.includes(query);
@@ -228,7 +250,7 @@ function addDetail(list, label, value) {
 
 function openDetails(item) {
   elements.dialogContent.replaceChildren();
-  const kicker = makeElement("p", "dialog-kicker", `${item.category} / DSH SKILL`);
+  const kicker = makeElement("p", "dialog-kicker", `${item.category} / ${COLLECTIONS[state.collection].label}`);
   const title = makeElement("h2", "", item.name);
   title.id = "dialog-title";
   const description = makeElement("p", "dialog-description", item.summary || "该项目暂未提供简介，请前往仓库查看。");
@@ -306,23 +328,58 @@ function renderError(message) {
   elements.loadMore.hidden = true;
 }
 
+function updateCollectionUI() {
+  const collection = COLLECTIONS[state.collection];
+  document.querySelector("#catalog-title").textContent = collection.title;
+  elements.search.placeholder = collection.placeholder;
+  document.querySelector(".quick-start").hidden = state.collection !== "skills";
+  document.querySelectorAll("[data-collection]").forEach((button) => {
+    const active = button.dataset.collection === state.collection;
+    button.classList.toggle("active", active);
+    button.setAttribute("aria-selected", String(active));
+  });
+}
+
 async function loadData() {
-  renderLoading();
+  const collection = state.collection;
+  const loadId = ++state.loadId;
+  state.items = state.cache[collection];
+  if (state.items.length === 0) renderLoading();
   try {
-    const response = await fetch("data/skills.json", { cache: "no-cache" });
-    if (!response.ok) throw new Error(`HTTP ${response.status}`);
-    const data = await response.json();
-    if (!Array.isArray(data.items) || data.items.length === 0) throw new Error("数据格式不正确");
-    state.items = data.items;
-    document.querySelector("#skill-count").textContent = data.items.length;
-    document.querySelector("#verified-count").textContent = data.items.filter((item) => item.verified).length;
+    if (state.items.length === 0) {
+      const response = await fetch(COLLECTIONS[collection].url, { cache: "no-cache" });
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      const data = await response.json();
+      if (!Array.isArray(data.items) || data.items.length === 0) throw new Error("数据格式不正确");
+      state.cache[collection] = data.items;
+    }
+    if (loadId !== state.loadId || collection !== state.collection) return;
+    state.items = state.cache[collection];
+    document.querySelector("#skill-count").textContent = state.items.length;
+    document.querySelector("#verified-count").textContent = state.items.filter((item) => item.verified).length;
+    document.querySelector(`[data-collection="${collection}"] .collection-count`).textContent = state.items.length;
     state.visible = PAGE_SIZE;
     renderCategories();
     updateFavoriteCount();
     applyFilters();
   } catch (error) {
-    renderError(`请检查网络或稍后再试（${error.message}）。`);
+    if (loadId === state.loadId && collection === state.collection) renderError(`请检查网络或稍后再试（${error.message}）。`);
   }
+}
+
+function switchCollection(collection) {
+  if (!COLLECTIONS[collection]) return;
+  state.collection = collection;
+  state.query = "";
+  state.category = "全部";
+  state.verifiedOnly = false;
+  state.favoritesOnly = false;
+  state.visible = PAGE_SIZE;
+  elements.search.value = "";
+  elements.verified.checked = false;
+  updateCollectionUI();
+  updateFavoriteCount();
+  loadData();
 }
 
 elements.search.addEventListener("input", (event) => {
@@ -364,6 +421,14 @@ elements.dialog.addEventListener("click", (event) => {
   if (event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom) closeDialog();
 });
 
+document.querySelectorAll("[data-collection]").forEach((button) => {
+  button.addEventListener("click", () => switchCollection(button.dataset.collection));
+});
+
+document.querySelectorAll("[data-collection-link]").forEach((link) => {
+  link.addEventListener("click", () => switchCollection(link.dataset.collectionLink));
+});
+
 document.querySelectorAll("[data-copy-index]").forEach((button) => {
   button.addEventListener("click", () => copyText(INDEX_URL, "DSH 索引源已复制"));
 });
@@ -388,4 +453,5 @@ document.addEventListener("keydown", (event) => {
 });
 
 loadFavorites();
+updateCollectionUI();
 loadData();
