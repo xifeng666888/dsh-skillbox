@@ -124,6 +124,23 @@ function createBadge(text, className = "") {
   return makeElement("span", `badge ${className}`.trim(), text);
 }
 
+function createThemePreview(item) {
+  const wrapper = makeElement("div", "theme-preview");
+  const slug = item.repo.replace(/^https:\/\/github\.com\//, "");
+  const image = makeElement("img", "theme-preview-image");
+  image.src = `https://opengraph.githubassets.com/1/${slug}`;
+  image.alt = `${item.name} 的仓库示例页`;
+  image.loading = "lazy";
+  image.decoding = "async";
+  image.referrerPolicy = "no-referrer";
+  image.addEventListener("error", () => {
+    wrapper.classList.add("preview-fallback");
+    image.remove();
+  });
+  wrapper.append(image, makeElement("span", "theme-preview-tag", item.category));
+  return wrapper;
+}
+
 function createCard(item) {
   const card = makeElement("article", "skill-card");
   card.dataset.category = item.category;
@@ -161,6 +178,7 @@ function createCard(item) {
   repo.setAttribute("aria-label", `打开 ${item.name} 的 GitHub 仓库`);
   actions.append(details, repo);
 
+  if (state.collection === "themes") card.append(createThemePreview(item));
   card.append(top, badges, title, description, meta, actions);
   return card;
 }

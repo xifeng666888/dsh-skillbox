@@ -138,6 +138,11 @@ kbd { padding: 1px 7px; color: #87938b; border: 1px solid var(--line); backgroun
 .skill-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
 .skill-card { position: relative; display: flex; min-width: 0; min-height: 300px; flex-direction: column; padding: 22px; background: var(--card); border: 1px solid var(--line); border-radius: 16px; transition: transform .2s, border-color .2s, box-shadow .2s; }
 .skill-card:hover { border-color: #a9c2b2; box-shadow: var(--shadow); transform: translateY(-4px); }
+.theme-preview { position: relative; margin: -22px -22px 16px; overflow: hidden; aspect-ratio: 16 / 9; background: linear-gradient(135deg, #132c3c, #244d64); border-bottom: 1px solid var(--line); border-radius: 15px 15px 0 0; }
+.theme-preview-image { display: block; width: 100%; height: 100%; object-fit: cover; object-position: top center; transition: transform .3s ease; }
+.skill-card:hover .theme-preview-image { transform: scale(1.025); }
+.theme-preview-tag { position: absolute; right: 10px; bottom: 10px; padding: 3px 8px; color: #edf7f7; background: rgba(8,25,35,.78); border: 1px solid rgba(255,255,255,.18); border-radius: 5px; font-size: 10px; }
+.preview-fallback::after { position: absolute; inset: 0; display: grid; place-items: center; content: "示例页暂不可用"; color: #a7c2cc; font-size: 12px; }
 .card-top { display: flex; align-items: start; justify-content: space-between; gap: 15px; }
 .skill-icon { display: grid; width: 43px; height: 43px; flex-shrink: 0; place-items: center; color: var(--deep); background: #e4efdf; border-radius: 12px; font-size: 17px; font-weight: 900; text-transform: uppercase; }
 .skill-card[data-category="开发编程"] .skill-icon { background: #e0edff; }
