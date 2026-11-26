@@ -7,8 +7,8 @@
   <meta name="theme-color" content="#102b24">
   <title>DSH SKILLBOX · DSH 技能、主题与 MCP 工具箱</title>
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="assets/styles.css?v=8">
-  <script src="assets/app.js?v=8" defer></script>
+  <link rel="stylesheet" href="assets/styles.css?v=9">
+  <script src="assets/app.js?v=9" defer></script>
   <script src="assets/pixel-scene.js?v=7" defer></script>
 </head>
 <body>
@@ -68,9 +68,9 @@
 
       <div class="scene-stats" aria-label="资源库概览">
         <div><strong id="skill-count">—</strong><span>当前分栏项目</span></div>
-        <div><strong id="verified-count">—</strong><span>安装已验证</span></div>
-        <div><strong>CC BY 4.0</strong><span>公开数据许可</span></div>
-        <div><strong>dsh.so</strong><span>公开数据来源</span></div>
+        <div><strong id="verified-count">—</strong><span>来源已核验</span></div>
+        <div><strong>CC / MIT</strong><span>公开数据许可</span></div>
+        <div><strong>GitHub</strong><span>GitHub + dsh.so 数据来源</span></div>
       </div>
     </section>
 
@@ -90,9 +90,9 @@
       </div>
 
       <div class="collection-tabs" role="tablist" aria-label="资源类型">
-        <button class="collection-tab active" type="button" role="tab" data-collection="skills" aria-selected="true"><span>DSH Skill</span><b class="collection-count">101</b></button>
-        <button class="collection-tab" type="button" role="tab" data-collection="themes" aria-selected="false"><span>界面与主题</span><b class="collection-count">133</b></button>
-        <button class="collection-tab" type="button" role="tab" data-collection="mcp" aria-selected="false"><span>MCP</span><b class="collection-count">67</b></button>
+        <button class="collection-tab active" type="button" role="tab" data-collection="skills" aria-selected="true"><span>DSH Skill</span><b class="collection-count">100</b></button>
+        <button class="collection-tab" type="button" role="tab" data-collection="themes" aria-selected="false"><span>界面与主题</span><b class="collection-count">135</b></button>
+        <button class="collection-tab" type="button" role="tab" data-collection="mcp" aria-selected="false"><span>MCP</span><b class="collection-count">73</b></button>
       </div>
 
       <div class="toolbar">
@@ -131,7 +131,7 @@
       <div class="guide-intro">
         <p class="section-kicker">QUICK GUIDE</p>
         <h2 id="guide-title">两种用法，<br>都很简单。</h2>
-        <p>只想装一个，复制卡片里的命令；想拥有完整市场，把公开索引添加到 DSH。</p>
+        <p>只想装一个，打开卡片详情查看安装方式；想拥有完整市场，把公开索引添加到 DSH。</p>
       </div>
       <div class="guide-steps">
         <article><span>01</span><div><h3>启用自定义索引</h3><p>在 DSH 插件页启用实验功能“Custom plugin indexes”。</p></div></article>
@@ -143,14 +143,14 @@
     <section id="about" class="about" aria-labelledby="about-title">
       <div><p class="section-kicker">ABOUT THE DATA</p><h2 id="about-title">公开来源，清楚边界。</h2></div>
       <div class="about-copy">
-        <p>技能、主题与 MCP 项目的介绍、版本、星数与验证标签来自 <a href="https://www.dsh.so/market/" target="_blank" rel="noopener">dsh.so 公开市场索引</a>，按 CC BY 4.0 署名复用。原项目代码及许可证归各作者所有，请点击 GitHub 仓库核验。</p>
-        <p>“安装已验证”表示数据源记录过沙盒安装验证，不等于人工安全审查，也不保证适配你的 DSH 版本。本站不托管第三方安装包，不收集账号信息。</p>
+        <p>精选技能、主题与 MCP 元数据来自 <a href="https://www.dsh.so/market/" target="_blank" rel="noopener">dsh.so 公开市场索引</a>（CC BY 4.0）；GitHub 技能目录来自 <a href="https://github.com/dshworks/awesome-dsh-plugins" target="_blank" rel="noopener">awesome-dsh-plugins</a>（MIT），收录 SKILL.md 技能及来源可追溯的 DSH 技能插件包。原项目代码、图片及许可证归各作者所有。</p>
+        <p>“安装已验证”表示数据源记录过沙盒安装验证；“路径已核验”表示数据源确认过技能文件与兼容版本。两者都不等于本站人工安全审查，请安装前核对原仓库。本站不托管第三方安装包，不收集账号信息。</p>
       </div>
     </section>
   </main>
 
   <footer class="site-footer">
-    <div class="wrap footer-inner"><span><b>DSH SKILLBOX</b> · 由 xifeng666888 维护</span><span>数据：<a href="https://www.dsh.so/market/" target="_blank" rel="noopener">dsh.so</a> / CC BY 4.0 · 非 DeepSeek 官方站点</span></div>
+    <div class="wrap footer-inner"><span><b>DSH SKILLBOX</b> · 由 xifeng666888 维护</span><span>数据：dsh.so / CC BY 4.0 · <a href="https://github.com/dshworks/awesome-dsh-plugins" target="_blank" rel="noopener">GitHub Skills</a> / MIT · 非官方站点</span></div>
   </footer>
 
   <dialog id="skill-dialog" class="skill-dialog" aria-labelledby="dialog-title">

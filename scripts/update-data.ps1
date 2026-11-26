@@ -191,3 +191,5 @@ $mcpData = [ordered]@{
 $mcpJson = $mcpData | ConvertTo-Json -Depth 8
 [System.IO.File]::WriteAllText((Resolve-Path $directory).Path + "\mcp.json", $mcpJson, (New-Object System.Text.UTF8Encoding($false)))
 Write-Output "Generated $($mcpItems.Count) MCP projects at $mcpOutputPath"
+
+& (Join-Path $PSScriptRoot "update-github-skills.ps1")

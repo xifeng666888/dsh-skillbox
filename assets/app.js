@@ -124,12 +124,18 @@ function createBadge(text, className = "") {
   return makeElement("span", `badge ${className}`.trim(), text);
 }
 
-function createThemePreview(item) {
+function createVerificationBadge(item) {
+  if (item.status === "broken") return createBadge("已知不兼容", "pending");
+  if (item.verified) return createBadge(item.verificationType === "path" ? "✓ 路径已核验" : "✓ 安装已验证", "verified");
+  return createBadge(item.registry ? "路径未核验" : "安装未验证", "pending");
+}
+
+function createRepoPreview(item) {
   const wrapper = makeElement("div", "theme-preview");
   const slug = item.repo.replace(/^https:\/\/github\.com\//, "");
   const image = makeElement("img", "theme-preview-image");
   image.src = `https://opengraph.githubassets.com/1/${slug}`;
-  image.alt = `${item.name} 的仓库示例页`;
+  image.alt = `${item.name} 的 GitHub 仓库示例图`;
   image.loading = "lazy";
   image.decoding = "async";
   image.referrerPolicy = "no-referrer";
@@ -156,7 +162,7 @@ function createCard(item) {
 
   const badges = makeElement("div", "card-badges");
   badges.append(createBadge(item.category));
-  badges.append(item.verified ? createBadge("✓ 安装已验证", "verified") : createBadge("安装未验证", "pending"));
+  badges.append(createVerificationBadge(item));
   if (item.risk === "low") badges.append(createBadge("数据源：低风险"));
 
   const title = makeElement("h3", "", item.name);
@@ -172,13 +178,13 @@ function createCard(item) {
   details.type = "button";
   details.addEventListener("click", () => openDetails(item));
   const repo = makeElement("a", "repo-link", "GitHub ↗");
-  repo.href = item.repo;
+  repo.href = item.sourceUrl || item.repo;
   repo.target = "_blank";
   repo.rel = "noopener";
   repo.setAttribute("aria-label", `打开 ${item.name} 的 GitHub 仓库`);
   actions.append(details, repo);
 
-  if (state.collection === "themes") card.append(createThemePreview(item));
+  if (state.collection !== "mcp") card.append(createRepoPreview(item));
   card.append(top, badges, title, description, meta, actions);
   return card;
 }
@@ -280,19 +286,23 @@ function openDetails(item) {
   title.id = "dialog-title";
   const description = makeElement("p", "dialog-description", item.summary || "该项目暂未提供简介，请前往仓库查看。");
   const badges = makeElement("div", "dialog-badges");
-  badges.append(item.verified ? createBadge("✓ 安装已验证", "verified") : createBadge("安装未验证", "pending"));
+  badges.append(createVerificationBadge(item));
   if (item.risk === "low") badges.append(createBadge("数据源：低风险"));
   badges.append(createBadge(`★ ${formatNumber(item.stars)}`));
 
   const details = makeElement("dl", "detail-grid");
   addDetail(details, "作者", `@${item.author}`);
   addDetail(details, "版本", item.version);
-  addDetail(details, "安装来源", item.sourceType === "npm" ? "npm 精确版本" : "GitHub 固定提交 / 版本");
-  addDetail(details, "DSH 版本要求", item.dsh || "请到原仓库核验");
+  addDetail(details, "数据来源", item.registry || "dsh.so");
+  if (item.sourcePath) addDetail(details, "仓库子目录", item.sourcePath);
+  const installSource = item.sourceType === "npm" ? (item.version ? "npm 精确版本" : "npm 包") : item.sourceType === "skill" ? "GitHub SKILL.md 本地复制" : "GitHub 仓库";
+  addDetail(details, "安装来源", installSource);
+  addDetail(details, item.registry ? "DSH 核验版本" : "DSH 版本要求", item.dsh || "请到原仓库核验");
+  if (item.lastVerified) addDetail(details, "核验日期", item.lastVerified);
   addDetail(details, "固定提交", item.commit ? item.commit.slice(0, 12) : "未提供");
   addDetail(details, "许可证", item.license || "未结构化提供，请到仓库核验");
 
-  const installLabel = makeElement("p", "install-label", "在 DSH 终端中安装");
+  const installLabel = makeElement("p", "install-label", item.installType === "skill" ? "复制技能到当前项目（Git Bash）" : "在 DSH 终端中安装");
   const installBox = makeElement("div", "install-box");
   const code = makeElement("code", "", item.install);
   const copy = makeElement("button", "", "复制命令");
@@ -313,13 +323,26 @@ function openDetails(item) {
 
   const actions = makeElement("div", "dialog-actions");
   const repo = makeElement("a", "button button-dark", "打开 GitHub 仓库 ↗");
-  repo.href = item.repo;
+  repo.href = item.sourceUrl || item.repo;
   repo.target = "_blank";
   repo.rel = "noopener";
   const license = makeElement("span", "dialog-license", "安装前请阅读原仓库 README 与许可证");
   actions.append(repo, license);
 
-  elements.dialogContent.append(kicker, title, description, badges, details, installLabel, installBox, actions);
+  elements.dialogContent.append(kicker, title, description, badges, details);
+  if (item.evidenceUrl) {
+    const evidence = makeElement("a", "evidence-link", "查看来源文件与核验依据 ↗");
+    evidence.href = item.evidenceUrl;
+    evidence.target = "_blank";
+    evidence.rel = "noopener";
+    elements.dialogContent.append(evidence);
+  }
+  if (item.install) {
+    elements.dialogContent.append(installLabel, installBox);
+  } else {
+    elements.dialogContent.append(makeElement("p", "dialog-license", "官方仓库技能，请按原仓库说明使用。"));
+  }
+  elements.dialogContent.append(actions);
   elements.dialog.showModal();
   document.body.style.overflow = "hidden";
 }

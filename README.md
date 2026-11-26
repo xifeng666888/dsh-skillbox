@@ -22,7 +22,15 @@ Windows PowerShell：
 ./scripts/update-data.ps1
 ```
 
-脚本读取 dsh.so 的精选榜单索引，分别生成 `data/skills.json`、`data/themes.json` 和 `data/mcp.json`。更新后检查数据与页面，再提交变更。
+脚本读取 dsh.so 的精选榜单索引，生成 `data/themes.json` 和 `data/mcp.json`，并将精选技能与 GitHub 的 `awesome-dsh-plugins` 技能目录去重合并到 `data/skills.json`。技能图片使用对应 GitHub 仓库的 Open Graph 示例图，支持懒加载和失败占位。
+
+也可单独更新 GitHub 技能：
+
+```powershell
+./scripts/update-github-skills.ps1
+```
+
+更新后检查数据与页面，再提交变更。
 
 ## 部署
 
@@ -31,8 +39,9 @@ Windows PowerShell：
 ## 数据与许可
 
 - 站点代码：MIT，见 `LICENSE`。
-- 技能元数据：[dsh.so Plugin Market](https://www.dsh.so/market/)，按 **CC BY 4.0** 署名复用。
+- 精选技能、主题与 MCP 元数据：[dsh.so Plugin Market](https://www.dsh.so/market/)，按 **CC BY 4.0** 署名复用。
+- GitHub 技能元数据：[awesome-dsh-plugins](https://github.com/dshworks/awesome-dsh-plugins)，按 **MIT** 许可复用；导入 `SKILL.md` 技能，以及名称或来源证据明确表明用途的 DSH 技能插件包。
 - 各 Skill / 插件的代码、图文和许可证归对应作者所有；本站不重新分发其安装包，详情页提供原 GitHub 仓库链接。
-- “安装已验证”来自数据源记录，不代表本站人工审计或 DeepSeek 官方背书。安装前应核对原仓库、许可证和 DSH 版本要求。
+- “安装已验证”与“路径已核验”均来自对应数据源，不代表本站人工审计或 DeepSeek 官方背书。安装前应核对原仓库、许可证和 DSH 版本要求。
 
 维护者：[xifeng666888](https://github.com/xifeng666888)。本站是社区导航项目，不是 DeepSeek 官方站点。

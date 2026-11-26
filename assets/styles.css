@@ -142,7 +142,7 @@ kbd { padding: 1px 7px; color: #87938b; border: 1px solid var(--line); backgroun
 .theme-preview-image { display: block; width: 100%; height: 100%; object-fit: cover; object-position: top center; transition: transform .3s ease; }
 .skill-card:hover .theme-preview-image { transform: scale(1.025); }
 .theme-preview-tag { position: absolute; right: 10px; bottom: 10px; padding: 3px 8px; color: #edf7f7; background: rgba(8,25,35,.78); border: 1px solid rgba(255,255,255,.18); border-radius: 5px; font-size: 10px; }
-.preview-fallback::after { position: absolute; inset: 0; display: grid; place-items: center; content: "示例页暂不可用"; color: #a7c2cc; font-size: 12px; }
+.preview-fallback::after { position: absolute; inset: 0; display: grid; place-items: center; content: "示例图暂不可用"; color: #a7c2cc; font-size: 12px; }
 .card-top { display: flex; align-items: start; justify-content: space-between; gap: 15px; }
 .skill-icon { display: grid; width: 43px; height: 43px; flex-shrink: 0; place-items: center; color: var(--deep); background: #e4efdf; border-radius: 12px; font-size: 17px; font-weight: 900; text-transform: uppercase; }
 .skill-card[data-category="开发编程"] .skill-icon { background: #e0edff; }
@@ -223,11 +223,12 @@ kbd { padding: 1px 7px; color: #87938b; border: 1px solid var(--line); backgroun
 .detail-item dd { margin: 2px 0 0; overflow-wrap: anywhere; font-size: 12px; font-weight: 650; }
 .install-label { margin: 0 0 7px; color: var(--muted); font-size: 11px; font-weight: 700; }
 .install-box { display: flex; align-items: start; gap: 10px; padding: 14px; color: #e6f0e8; background: var(--deep); border-radius: 10px; }
-.install-box code { flex: 1; overflow-wrap: anywhere; font-size: 12px; line-height: 1.7; }
+.install-box code { flex: 1; min-width: 0; overflow-wrap: anywhere; white-space: pre-wrap; user-select: text; font-size: 12px; line-height: 1.7; }
 .install-box button { flex-shrink: 0; padding: 5px 10px; color: var(--deep); border: 0; background: var(--lime); border-radius: 6px; font-size: 11px; font-weight: 800; }
 .dialog-actions { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: 20px; }
 .dialog-actions .button { min-height: 40px; font-size: 12px; }
 .dialog-license { color: var(--muted); font-size: 11px; }
+.evidence-link { display: inline-block; margin: -8px 0 18px; color: var(--accent); font-size: 12px; font-weight: 650; }
 .toast { position: fixed; z-index: 100; bottom: 25px; left: 50%; max-width: calc(100% - 40px); padding: 11px 20px; color: white; background: #173b31; border: 1px solid rgba(255,255,255,.2); border-radius: 99px; box-shadow: 0 10px 35px rgba(0,0,0,.2); opacity: 0; pointer-events: none; transform: translate(-50%, 15px); transition: .2s; font-size: 12px; }
 .toast.show { opacity: 1; transform: translate(-50%, 0); }
 
