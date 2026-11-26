@@ -33,6 +33,14 @@
   let hearts = [];
   let bubbles = [];
   let spores = [];
+  let poseOverride = null;
+  let poseUntil = 0;
+  const characterImages = {};
+  const characterPoses = {
+    idle: { width: 210, aspect: 889 / 500 },
+    moving: { width: 150, aspect: 1 },
+    happy: { width: 175, aspect: 360 / 300 },
+  };
 
   function random(min, max) {
     return min + Math.random() * (max - min);
@@ -66,6 +74,15 @@
       phase: random(0, Math.PI * 2),
       color: Math.random() > 0.5 ? "#68d8d1" : "#b6d8dd",
     }));
+  }
+
+  function loadCharacterImages() {
+    Object.keys(characterPoses).forEach((pose) => {
+      const image = new Image();
+      image.src = `assets/characters/${pose}.png`;
+      image.onload = () => { image.dataset.loaded = "true"; };
+      characterImages[pose] = image;
+    });
   }
 
   function resizeScene() {
@@ -125,6 +142,8 @@
     snowing = !snowing;
     snowButton.textContent = snowing ? "暂停下雪" : "继续下雪";
     snowButton.setAttribute("aria-pressed", String(snowing));
+    poseOverride = "idle";
+    poseUntil = performance.now() + 1400;
     setStatus(snowing ? "云朵开始下雪啦，注意脚下积雪 ❄" : "雪停了，夜空安静下来了");
   }
 
@@ -132,6 +151,8 @@
     fish.targetX = rice.x - 38 * fish.direction;
     fish.targetY = rice.y - 45;
     spawnHearts(9);
+    poseOverride = "happy";
+    poseUntil = performance.now() + 3500;
     setStatus("蛋炒饭出现！大肥鱼正加速游过去 ♡");
   }
 
@@ -140,6 +161,8 @@
     fish.targetY = height * 0.42;
     fish.vx *= 0.25;
     fish.vy *= 0.25;
+    poseOverride = "moving";
+    poseUntil = performance.now() + 4000;
     setStatus("大肥鱼听到呼唤，正在游回画面中央");
     bubbleCooldown = 0;
   }
@@ -256,7 +279,99 @@
     rect(x + 7, y - 19, 5, 5, "#fff0da");
   }
 
+  function currentCharacterPose() {
+    if (poseOverride && performance.now() < poseUntil) return poseOverride;
+    if (Math.hypot(fish.x - rice.x, fish.y - (rice.y - 35)) < 115) return "happy";
+    if (Math.hypot(fish.vx, fish.vy) > 30) return "moving";
+    return "idle";
+  }
+
+  function drawBlink(pose, w, h) {
+    if (reducedMotion || pose === "happy" || elapsed % 5.4 > 0.14) return;
+    const points = pose === "moving"
+      ? [[0.35, 0.548], [0.535, 0.548]]
+      : [[0.427, 0.426], [0.527, 0.426]];
+    const eyeWidth = w * (pose === "moving" ? 0.075 : 0.046);
+    const eyeHeight = Math.max(2, h * 0.018);
+    points.forEach(([px, py]) => {
+      const x = (px - 0.5) * w;
+      const y = (py - 0.5) * h;
+      ctx.fillStyle = "#ffe2d5";
+      ctx.beginPath();
+      ctx.ellipse(x, y, eyeWidth / 2, eyeHeight, 0, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.strokeStyle = "#392f48";
+      ctx.lineWidth = Math.max(1, w * 0.006);
+      ctx.beginPath();
+      ctx.moveTo(x - eyeWidth / 2, y);
+      ctx.quadraticCurveTo(x, y + eyeHeight, x + eyeWidth / 2, y);
+      ctx.stroke();
+    });
+  }
+
+  function drawFloatingHair(pose, w, h) {
+    if (reducedMotion) return;
+    const colors = ["#2f6fb3", "#54a8df", "#a2d8f6"];
+    for (let index = 0; index < 7; index += 1) {
+      const side = index % 2 === 0 ? -1 : 1;
+      const startX = side * w * (0.22 + (index % 3) * 0.025);
+      const startY = -h * 0.08 + index * h * 0.055;
+      const wave = Math.sin(elapsed * 2.8 + index * 0.85) * (5 + index);
+      const length = h * (0.18 + (index % 3) * 0.055);
+      ctx.strokeStyle = colors[index % colors.length];
+      ctx.globalAlpha = 0.68;
+      ctx.lineWidth = Math.max(1, w * 0.007);
+      ctx.lineCap = "round";
+      ctx.beginPath();
+      ctx.moveTo(startX, startY);
+      ctx.bezierCurveTo(
+        startX + side * (8 + wave * 0.3), startY + length * 0.3,
+        startX + side * (14 + wave), startY + length * 0.7,
+        startX + side * (10 + wave), startY + length,
+      );
+      ctx.stroke();
+    }
+    const tailWave = Math.sin(elapsed * 3.1) * 8;
+    ctx.globalAlpha = 0.48;
+    ctx.strokeStyle = "#4e99d5";
+    ctx.lineWidth = Math.max(1.5, w * 0.009);
+    ctx.beginPath();
+    ctx.moveTo(w * 0.23, h * 0.08);
+    ctx.bezierCurveTo(w * 0.37, h * 0.12, w * 0.42 + tailWave, h * 0.24, w * 0.5 + tailWave, h * 0.28);
+    ctx.stroke();
+    ctx.globalAlpha = 1;
+  }
+
+  function drawCharacter() {
+    const pose = currentCharacterPose();
+    const image = characterImages[pose];
+    if (!image || !image.complete || !image.naturalWidth) return false;
+    const spec = characterPoses[pose];
+    const breath = reducedMotion ? 1 : 1 + Math.sin(elapsed * 2.2) * 0.014;
+    const w = spec.width * breath;
+    const h = w / spec.aspect * breath;
+    const bob = reducedMotion ? 0 : Math.sin(elapsed * 2.4) * 3;
+    const tilt = reducedMotion ? 0 : Math.max(-0.45, Math.min(0.45, fish.vx / 260)) * 0.12 + Math.sin(elapsed * 1.4) * 0.018;
+
+    ctx.save();
+    ctx.translate(Math.round(fish.x), Math.round(fish.y + bob));
+    ctx.scale(fish.direction, 1);
+    ctx.rotate(tilt);
+    ctx.globalAlpha = 0.16;
+    ctx.fillStyle = "#06121f";
+    ctx.beginPath();
+    ctx.ellipse(0, h / 2 + 8, w * 0.27, 5, 0, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.globalAlpha = 1;
+    ctx.drawImage(image, -w / 2, -h / 2, w, h);
+    drawBlink(pose, w, h);
+    drawFloatingHair(pose, w, h);
+    ctx.restore();
+    return true;
+  }
+
   function drawFish() {
+    if (drawCharacter()) return;
     const bob = reducedMotion ? 0 : Math.sin(elapsed * 5) * 2;
     const tail = reducedMotion ? 0 : Math.sin(elapsed * 10) * 4;
     ctx.save();
@@ -438,11 +553,15 @@
     if (object === "mushroom") {
       mushroomTime = 0;
       spawnSpores();
+      poseOverride = "moving";
+      poseUntil = performance.now() + 1500;
       setStatus("蘑菇弹跳了一下，散落出发光孢子 ✦");
       return;
     }
     fish.targetX = Math.max(45, Math.min(width - 45, point.x));
     fish.targetY = Math.max(55, Math.min(groundY - 35, point.y));
+    poseOverride = "moving";
+    poseUntil = performance.now() + 4000;
     setStatus("大肥鱼收到新目的地，摆尾出发！");
   });
 
@@ -489,6 +608,7 @@
     requestAnimationFrame(frame);
   }
 
+  loadCharacterImages();
   resizeScene();
   requestAnimationFrame(frame);
 })();
